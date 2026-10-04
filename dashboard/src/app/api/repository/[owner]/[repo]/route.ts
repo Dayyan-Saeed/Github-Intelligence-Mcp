@@ -3,15 +3,25 @@ import { NextRequest, NextResponse } from "next/server";
 const GITHUB_API = "https://api.github.com";
 const TOKEN = process.env.GITHUB_TOKEN;
 
-async function ghFetch(path: string) {
-  const res = await fetch(`${GITHUB_API}${path}`, {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-      Accept: "application/vnd.github+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
+async function ghFetch(path: string): Promise<any> {
+  const base: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
+  const auth = TOKEN
+    ? { ...base, Authorization: `Bearer ${TOKEN}` }
+    : base;
+  let res = await fetch(`${GITHUB_API}${path}`, {
+    headers: auth,
     next: { revalidate: 300 },
   });
+  // Invalid/expired token: fall back to unauthenticated (60 req/hr).
+  if (res.status === 401 && TOKEN) {
+    res = await fetch(`${GITHUB_API}${path}`, {
+      headers: base,
+      next: { revalidate: 300 },
+    });
+  }
   if (!res.ok) throw new Error(`GitHub ${res.status}: ${path}`);
   return res.json();
 }
