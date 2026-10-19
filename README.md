@@ -216,13 +216,7 @@ uv run pytest
 
 CI runs all four on every push and pull request.
 
-## Roadmap
 
-- **Phase 2** — deterministic health analysis, maintenance-risk detection, repository comparison
-- **Phase 3** — MCP resources (`github://repo/{owner}/{repo}/…`) and guided prompts
-- **Phase 4** — SQLite response cache with per-endpoint TTLs, advanced rate-limit handling, GraphQL
-- **Phase 5** — LangGraph autonomous investigation agent
-- **Phase 6** — Next.js dashboard
 
 ## License
 
