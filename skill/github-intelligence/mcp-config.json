@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "github-intelligence": {
+      "command": "github-intelligence-mcp",
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      }
+    }
+  }
+}
